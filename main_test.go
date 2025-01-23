@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/sqs"
 	"github.com/aws/aws-sdk-go-v2/service/sqs/types"
-	sqsmock "github.com/gvre/awsmock-v2/sqsmock"
+	"github.com/gvre/awsmock-v2/sqsmock"
 )
 
 type mockSQSAPI struct {
@@ -17,7 +17,7 @@ type mockSQSAPI struct {
 	Messages []types.Message
 }
 
-func (m *mockSQSAPI) ReceiveMessage(ctx context.Context, input *sqs.ReceiveMessageInput, optFns ...func(*sqs.Options)) (*sqs.ReceiveMessageOutput, error) {
+func (m *mockSQSAPI) ReceiveMessage(_ context.Context, _ *sqs.ReceiveMessageInput, _ ...func(*sqs.Options)) (*sqs.ReceiveMessageOutput, error) {
 	return &sqs.ReceiveMessageOutput{
 		Messages: m.Messages,
 	}, nil
@@ -68,7 +68,7 @@ func TestInitMetrics(t *testing.T) {
 	}
 }
 func TestUpdateMessageCount(t *testing.T) {
-	initMetrics() // Инициализация метрик для тестов
+	initMetrics()
 
 	queueURL := "https://example.com/queue"
 	updateMessageCount(queueURL, 5)
@@ -81,5 +81,22 @@ func TestUpdateMessageCount(t *testing.T) {
 	metricValue := testutil.ToFloat64(metric)
 	if metricValue != 5 {
 		t.Errorf("expected 5, got %v", metricValue)
+	}
+}
+func TestUpdateMessageAge(t *testing.T) {
+	initMetrics()
+
+	queueURL := "https://example.com/queue"
+	expectedAge := 15.0
+	updateMessageAge(queueURL, expectedAge)
+
+	metric := sqsMessageAge.With(prometheus.Labels{"queue_url": queueURL})
+	if metric == nil {
+		t.Fatalf("expected metric to be initialized")
+	}
+
+	metricValue := testutil.ToFloat64(metric)
+	if metricValue != expectedAge {
+		t.Errorf("expected %v, got %v", expectedAge, metricValue)
 	}
 }

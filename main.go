@@ -5,6 +5,7 @@ import (
 	"flag"
 	"log"
 	"net/http"
+	"strconv"
 	"sync"
 	"time"
 
@@ -63,6 +64,17 @@ func listenQueue(queue QueueConfig, defaultRegion string) {
 		}
 
 		updateMessageCount(queue.URL, len(msgs))
+
+		for _, msg := range msgs {
+			if sentTimestampStr, exists := msg.Attributes["SentTimestamp"]; exists {
+				sentTimestamp, err := strconv.ParseInt(sentTimestampStr, 10, 64)
+				if err == nil {
+					age := time.Since(time.Unix(0, sentTimestamp*int64(time.Millisecond))).Seconds()
+					updateMessageAge(queue.URL, age)
+
+				}
+			}
+		}
 		time.Sleep(5 * time.Second)
 	}
 }
