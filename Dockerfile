@@ -6,5 +6,5 @@ COPY . .
 RUN chown -R appuser /app
 USER appuser
 RUN go mod download
-EXPOSE 8080
+EXPOSE 9090
 ENTRYPOINT ["go", "run", "main.go", "config.go", "metrics.go", "sqs.go", "-config", "./config.yaml"]

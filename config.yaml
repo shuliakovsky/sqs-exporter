@@ -1,5 +1,7 @@
 aws_region: us-east-1
+listen_ip: 0.0.0.0
+port: 9090
 queues:
-  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-cognitoMemberAccountRemove_queue_dev
-  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-committedTransactionBusinessEntityService_queue_dev.fifo
-  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-committedTransactionStatsService_queue_dev.fifo
+  - url: "https://sqs.us-east-1.amazonaws.com/0123456789012/MyQueue"
+  - url: "https://sqs.us-west-2.amazonaws.com/123456789012/MyQueueInUsWest2"
+    region: "us-west-2"
