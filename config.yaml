@@ -1,0 +1,5 @@
+aws_region: us-east-1
+queues:
+  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-cognitoMemberAccountRemove_queue_dev
+  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-committedTransactionBusinessEntityService_queue_dev.fifo
+  - url: https://sqs.us-east-1.amazonaws.com/921748144737/dlq-committedTransactionStatsService_queue_dev.fifo

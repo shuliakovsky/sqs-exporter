@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+  sqs-exporter:
+    image: sqs-exporter
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./config.yaml:/app/config.yaml
+    environment:
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_SESSION_TOKEN
+      - AWS_DEFAULT_REGION
+      - AWS_REGION
+      - AWS_ROLE_ARN
+      - AWS_STS_REGIONAL_ENDPOINTS
+      - AWS_WEB_IDENTITY_TOKEN_FILE
